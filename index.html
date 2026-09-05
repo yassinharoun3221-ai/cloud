@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم السحابية اللامركزية - Decentralized Cloud</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+
+        :root {
+            --bg-color: #030712;
+            --card-bg: rgba(15, 23, 42, 0.75);
+            --border-color: rgba(56, 189, 248, 0.2);
+            --primary-glow: rgba(56, 189, 248, 0.4);
+            --accent-color: #38bdf8;
+            --accent-gradient: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(129, 140, 248, 0.15) 0px, transparent 50%);
+            color: var(--text-main);
+            min-height: 100vh;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 900;
+            margin: 0 0 10px 0;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px var(--primary-glow);
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            padding: 25px 30px;
+            margin: 20px 0;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(56, 189, 248, 0.4);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), 0 0 30px var(--primary-glow);
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--text-main);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: right;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(3, 7, 18, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--text-main);
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: var(--accent-gradient);
+            color: #030712;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: 1.05rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(56, 189, 248, 0.5);
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        ul::-webkit-scrollbar {
+            width: 6px;
+        }
+        ul::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        li {
+            background: rgba(3, 7, 18, 0.5);
+            margin: 10px 0;
+            padding: 14px 18px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95rem;
+            transition: background 0.2s ease;
+        }
+
+        li:hover {
+            background: rgba(3, 7, 18, 0.8);
+            border-color: rgba(56, 189, 248, 0.2);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .server-url {
+            display: block;
+            margin-top: 8px;
+            color: var(--accent-color);
+            font-family: monospace;
+            font-size: 0.85rem;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>نظام الإدارة السحابي الموزع</h1>
+            <p>منصة تشغيل البنية التحتية المحلية بدون خوادم استضافة مركزية</p>
+        </header>
+
+        <div class="card">
+            <h3>🌐 حالة اتصال النظام الأساسي</h3>
+            <div id="status">
+                <span class="status-badge">جاري المزامنة مع قاعدة البيانات الموزعة...</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>➕ تسجيل صنف جديد في المخزن</h3>
+            <div class="input-group">
+                <label for="pName">اسم الصنف:</label>
+                <input type="text" id="pName" placeholder="أدخل اسم المنتج...">
+            </div>
+            <div class="input-group">
+                <label for="pPrice">السعر (ج.م):</label>
+                <input type="number" id="pPrice" placeholder="أدخل القيمة المالية...">
+            </div>
+            <div class="input-group">
+                <label for="pQuantity">الكمية المتوفرة:</label>
+                <input type="number" id="pQuantity" placeholder="أدخل الكمية المخزنة...">
+            </div>
+            <button onclick="addProduct()">حفظ وإرسال للنظام المحلي</button>
+        </div>
+
+        <div class="card">
+            <h3>📦 سجل الأصناف المسجلة (قاعدة بيانات SQLite)</h3>
+            <ul id="productList">جاري استعلام البيانات...</ul>
+        </div>
+    </div>
+
+    <script>
+        const FIREBASE_URL = "https://test-7a77f-default-rtdb.firebaseio.com/flask_server.json";
+
+        async function initApp() {
+            try {
+                let res = await fetch(FIREBASE_URL);
+                let data = await res.json();
+                
+                if (data && data.url) {
+                    let serverUrl = data.url;
+                    document.getElementById("status").innerHTML = `
+                        <span class="status-badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399;">🟢 متصل بالسيرفر المحلي بنجاح</span>
+                        <span class="server-url">${serverUrl}</span>
+                    `;
+                    loadProducts(serverUrl);
+                } else {
+                    document.getElementById("status").innerHTML = `<span style="color: #f87171;">🔴 العقدة المحلية (Node) غير متصلة أو متوقفة حالياً.</span>`;
+                }
+            } catch (err) {
+                console.error(err);
+                document.getElementById("status").innerHTML = `<span style="color: #f87171;">⚠️ تعذر الاتصال بخدمة المزامنة السحابية.</span>`;
+            }
+        }
+
+        async function loadProducts(serverUrl) {
+            try {
+                let res = await fetch(`${serverUrl}/products`);
+                let products = await res.json();
+                let list = document.getElementById("productList");
+                list.innerHTML = "";
+                
+                if (products.length === 0) {
+                    list.innerHTML = "<li style='justify-content: center; color: #94a3b8;'>لا توجد بيانات مسجلة حالياً في قاعدة البيانات.</li>";
+                    return;
+                }
+
+                products.forEach(p => {
+                    let li = document.createElement("li");
+                    li.innerHTML = `<span><strong>${p.name}</strong></span> <span>السعر: ${p.price} ج.م | الكمية: ${p.quantity}</span>`;
+                    list.appendChild(li);
+                });
+            } catch (err) {
+                console.error(err);
+                document.getElementById("productList").innerHTML = "<li style='justify-content: center; color: #f87171;'>❌ فشل استرداد البيانات من الخادم المحلي.</li>";
+            }
+        }
+
+        async function addProduct() {
+            let name = document.getElementById("pName").value;
+            let price = document.getElementById("pPrice").value;
+            let quantity = document.getElementById("pQuantity").value;
+
+            if (!name || !price || !quantity) {
+                alert("برجاء استكمال كافة الحقول المطلوبة.");
+                return;
+            }
+
+            let res = await fetch(FIREBASE_URL);
+            let data = await res.json();
+            if (!data || !data.url) return alert("خطأ: الخادم المحلي غير متصل بالشبكة!");
+
+            let serverUrl = data.url;
+
+            let response = await fetch(`${serverUrl}/products`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, price: parseFloat(price), quantity: parseInt(quantity) })
+            });
+
+            let result = await response.json();
+            alert(result.message || "تمت العملية بنجاح!");
+            
+            document.getElementById("pName").value = "";
+            document.getElementById("pPrice").value = "";
+            document.getElementById("pQuantity").value = "";
+
+            loadProducts(serverUrl);
+        }
+
+        initApp();
+    </script>
+</body>
+</html>
