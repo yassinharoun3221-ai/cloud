@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كلاوند من غير استضافة يا فنان! 😎</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background: #0f172a; color: #f8fafc; padding: 20px; text-align: center; }
+        .card { background: #1e293b; padding: 20px; margin: 15px auto; border-radius: 10px; max-width: 500px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        input, button { padding: 10px; margin: 5px; width: 80%; border-radius: 5px; border: none; }
+        button { background: #10b981; color: white; font-weight: bold; cursor: pointer; }
+        button:hover { background: #059669; }
+        ul { list-style: none; padding: 0; }
+        li { background: #334155; margin: 5px 0; padding: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>🚀 لوحة تحكم السيرفر المحلي (Cloudless)</h2>
+        <p id="status">جاري جلب رابط السيرفر من Firebase... 🔄</p>
+    </div>
+
+    <div class="card">
+        <h3>➕ إضافة منتج جديد</h3>
+        <input type="text" id="pName" placeholder="اسم المنتج"><br>
+        <input type="number" id="pPrice" placeholder="السعر"><br>
+        <input type="number" id="pQuantity" placeholder="الكمية"><br>
+        <button onclick="addProduct()">حفظ المنتج</button>
+    </div>
+
+    <div class="card">
+        <h3>📦 قائمة المنتجات (من SQLite المحلي)</h3>
+        <ul id="productList">جاري التحميل...</ul>
+    </div>
+
+    <script>
+        const FIREBASE_URL = "https://test-7a77f-default-rtdb.firebaseio.com/flask_server.json";
+
+        async function initApp() {
+            try {
+                // 1. جلب رابط الـ Cloudflare Tunnel من Firebase من غير Token خالص!
+                let res = await fetch(FIREBASE_URL);
+                let data = await res.json();
+                
+                if (data && data.url) {
+                    let serverUrl = data.url;
+                    document.getElementById("status").innerHTML = `✅ متصل بالسيرفر المحلي بنجاح!<br><small style="color:#10b981">${serverUrl}</small>`;
+                    
+                    // 2. تحميل المنتجات من السيرفر المحلي
+                    loadProducts(serverUrl);
+                } else {
+                    document.getElementById("status").innerHTML = "❌ السيرفر مش شغال أو مش مبعوث للفايربيس.";
+                }
+            } catch (err) {
+                console.error(err);
+                document.getElementById("status").innerText = "❌ حصل خطأ أثناء الاتصال بالفايربيس.";
+            }
+        }
+
+        async function loadProducts(serverUrl) {
+            try {
+                let res = await fetch(`${serverUrl}/products`);
+                let products = await res.json();
+                let list = document.getElementById("productList");
+                list.innerHTML = "";
+                
+                if (products.length === 0) {
+                    list.innerHTML = "<li>مفيش منتجات مضافة لسه.</li>";
+                    return;
+                }
+
+                products.forEach(p => {
+                    let li = document.createElement("li");
+                    li.innerText = `${p.name} - السعر: ${p.price} ج.م - الكمية: ${p.quantity}`;
+                    list.appendChild(li);
+                });
+            } catch (err) {
+                console.error(err);
+                document.getElementById("productList").innerHTML = "<li>❌ مش قادرين نكلم السيرفر المحلي.</li>";
+            }
+        }
+
+        async function addProduct() {
+            let name = document.getElementById("pName").value;
+            let price = document.getElementById("pPrice").value;
+            let quantity = document.getElementById("pQuantity").value;
+
+            let res = await fetch(FIREBASE_URL);
+            let data = await res.json();
+            if (!data || !data.url) return alert("السيرفر غير متصل!");
+
+            let serverUrl = data.url;
+
+            let response = await fetch(`${serverUrl}/products`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, price: parseFloat(price), quantity: parseInt(quantity) })
+            });
+
+            let result = await response.json();
+            alert(result.message || "تم بنجاح!");
+            loadProducts(serverUrl);
+        }
+
+        // تشغيل الوظيفة أول ما الصفحة تفتح
+        initApp();
+    </script>
+</body>
+</html>
