@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة الإدارة المركزية الموزعة - Enterprise Cloudless ERP</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+
+        :root {
+            --bg-color: #030712;
+            --card-bg: rgba(15, 23, 42, 0.8);
+            --border-color: rgba(56, 189, 248, 0.2);
+            --primary-glow: rgba(56, 189, 248, 0.35);
+            --accent-color: #38bdf8;
+            --accent-gradient: linear-gradient(135deg, #38bdf8 0%, #6366f1 100%);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.12) 0px, transparent 50%);
+            color: var(--text-main);
+            min-height: 100vh;
+            margin: 0;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 750px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 900;
+            margin: 0 0 8px 0;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 25px var(--primary-glow);
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            padding: 22px 25px;
+            margin: 18px 0;
+            border-radius: 18px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(56, 189, 248, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 20px var(--primary-glow);
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            margin-top: 0;
+            margin-bottom: 18px;
+            color: var(--text-main);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .grid-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+            text-align: right;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 11px 14px;
+            background: rgba(3, 7, 18, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 9px;
+            color: var(--text-main);
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            background: var(--accent-gradient);
+            color: #030712;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            border-radius: 9px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);
+            transition: all 0.3s ease;
+            margin-top: 8px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 220px;
+            overflow-y: auto;
+        }
+
+        ul::-webkit-scrollbar {
+            width: 5px;
+        }
+        ul::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        li {
+            background: rgba(3, 7, 18, 0.45);
+            margin: 8px 0;
+            padding: 12px 16px;
+            border-radius: 9px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-color);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+        }
+
+        .server-url {
+            display: block;
+            margin-top: 6px;
+            color: var(--text-muted);
+            font-family: monospace;
+            font-size: 0.75rem;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>منصة الإدارة المركزية الموزعة</h1>
+            <p>نظام تخزين وإدارة عمليات متكامل بدون خوادم استضافة مركزية (Cloudless Architecture)</p>
+        </header>
+
+        <div class="card">
+            <h3>🌐 حالة العقدة المحلية (Node Status)</h3>
+            <div id="status">
+                <span class="status-badge">جاري تهيئة الاتصال والمزامنة...</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>➕ تسجيل صنف جديد في النظام</h3>
+            <div class="grid-inputs">
+                <div class="input-group full-width">
+                    <label for="pName">اسم الصنف التجاري:</label>
+                    <input type="text" id="pName" placeholder="أدخل اسم المنتج...">
+                </div>
+                <div class="input-group">
+                    <label for="pCategory">التصنيف الإداري:</label>
+                    <select id="pCategory">
+                        <option value="">جاري تحميل التصنيفات...</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="pPrice">السعر المالي (ج.م):</label>
+                    <input type="number" id="pPrice" placeholder="القيمة...">
+                </div>
+                <div class="input-group full-width">
+                    <label for="pQuantity">الكمية المتاحة في المخزن:</label>
+                    <input type="number" id="pQuantity" placeholder="الكمية...">
+                </div>
+            </div>
+            <button onclick="addProduct()">إرسال وتخزين في العقدة المحلية</button>
+        </div>
+
+        <div class="card">
+            <h3>📦 قاعدة البيانات المركزية الموزعة (SQLite)</h3>
+            <ul id="productList">جاري سحب البيانات المحدثة...</ul>
+        </div>
+    </div>
+
+    <script>
+        const FIREBASE_URL = "https://test-7a77f-default-rtdb.firebaseio.com/flask_server.json";
+        let cachedServerUrl = null;
+
+        function wait(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        async function getActiveServerUrl(forceFetch = false) {
+            if (cachedServerUrl && !forceFetch) return cachedServerUrl;
+            try {
+                let res = await fetch(FIREBASE_URL);
+                let data = await res.json();
+                if (data && data.url) {
+                    cachedServerUrl = data.url;
+                    return cachedServerUrl;
+                }
+            } catch (err) {
+                console.error("خطأ في جلب الرابط:", err);
+            }
+            return null;
+        }
+
+        async function initApp() {
+            let serverUrl = await getActiveServerUrl(true);
+            if (!serverUrl) {
+                document.getElementById("status").innerHTML = `<span style="color: #f87171;">⚠️ تعذر الوصول لعنوان العقدة المحلية.</span>`;
+                return;
+            }
+
+            try {
+                let res = await fetch(`${serverUrl}/products`);
+                if (!res.ok) throw new Error("Connection failed");
+                
+                let products = await res.json();
+                
+                document.getElementById("status").innerHTML = `
+                    <span class="status-badge">🟢 العقدة المحلية متصلة وتعمل بكفاءة</span>
+                    <span class="server-url">Route: ${serverUrl}</span>
+                `;
+                
+                renderProducts(products);
+                loadCategories(serverUrl);
+
+            } catch (err) {
+                // لو فشل، يستنى ثانيتين صامت ويعيد جلب الرابط وتجربة الاتصال تاني
+                await wait(2000);
+                let freshUrl = await getActiveServerUrl(true);
+                
+                if (freshUrl) {
+                    try {
+                        let res2 = await fetch(`${freshUrl}/products`);
+                        let products2 = await res2.json();
+                        
+                        document.getElementById("status").innerHTML = `
+                            <span class="status-badge">🟢 تم إعادة توجيه العقدة بنجاح</span>
+                            <span class="server-url">Route: ${freshUrl}</span>
+                        `;
+                        renderProducts(products2);
+                        loadCategories(freshUrl);
+                        return;
+                    } catch (e) {}
+                }
+
+                document.getElementById("status").innerHTML = `<span style="color: #f87171;">🔴 العقدة المحلية لا تستجيب للطلبات.</span>`;
+                document.getElementById("productList").innerHTML = "<li style='justify-content: center; color: #f87171;'>❌ تعذر استرداد السجلات المخزنة.</li>";
+            }
+        }
+
+        async function loadCategories(serverUrl) {
+            try {
+                let res = await fetch(`${serverUrl}/categories`);
+                let categories = await res.json();
+                let select = document.getElementById("pCategory");
+                select.innerHTML = "";
+                categories.forEach(c => {
+                    let opt = document.createElement("option");
+                    opt.value = c.id;
+                    opt.innerText = c.name;
+                    select.appendChild(opt);
+                });
+            } catch (e) {
+                console.error("فشل جلب التصنيفات");
+            }
+        }
+
+        function renderProducts(products) {
+            let list = document.getElementById("productList");
+            list.innerHTML = "";
+            
+            if (products.length === 0) {
+                list.innerHTML = "<li style='justify-content: center; color: var(--text-muted);'>لا توجد سجلات مسجلة حالياً.</li>";
+                return;
+            }
+
+            products.forEach(p => {
+                let li = document.createElement("li");
+                li.innerHTML = `
+                    <div>
+                        <strong>${p.name}</strong> 
+                        <small style="color:var(--accent-color); margin-right: 8px;">[${p.category || 'عام'}]</small>
+                    </div>
+                    <div>
+                        <span style="margin-left: 10px;">السعر: ${p.price} ج.م</span>
+                        <span>الكمية: ${p.quantity}</span>
+                    </div>
+                `;
+                list.appendChild(li);
+            });
+        }
+
+        async function addProduct() {
+            let name = document.getElementById("pName").value;
+            let category_id = document.getElementById("pCategory").value;
+            let price = document.getElementById("pPrice").value;
+            let quantity = document.getElementById("pQuantity").value;
+
+            if (!name || !price || !quantity) {
+                alert("برجاء ملء كافة الحقول الأساسية.");
+                return;
+            }
+
+            let serverUrl = await getActiveServerUrl();
+            if (!serverUrl) return alert("خطأ: الخادم المحلي غير متاح!");
+
+            try {
+                let response = await fetch(`${serverUrl}/products`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ 
+                        name, 
+                        category_id: parseInt(category_id), 
+                        price: parseFloat(price), 
+                        quantity: parseInt(quantity) 
+                    })
+                });
+
+                if (!response.ok) {
+                    await wait(2000);
+                    serverUrl = await getActiveServerUrl(true);
+                    await fetch(`${serverUrl}/products`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ 
+                            name, 
+                            category_id: parseInt(category_id), 
+                            price: parseFloat(price), 
+                            quantity: parseInt(quantity) 
+                        })
+                    });
+                }
+
+                alert("تم تسجيل الصنف في قاعدة البيانات المحلية بنجاح!");
+                document.getElementById("pName").value = "";
+                document.getElementById("pPrice").value = "";
+                document.getElementById("pQuantity").value = "";
+                initApp();
+            } catch (err) {
+                alert("خطأ أثناء الاتصال بالعقدة المحلية.");
+            }
+        }
+
+        initApp();
+    </script>
+</body>
+</html>
